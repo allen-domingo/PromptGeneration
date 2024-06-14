@@ -1,29 +1,34 @@
 from ProbGenerator import ProbGenerator
 import random
 class ExpSim:
-    def __init__(self):
-        generator = ProbGenerator()
-        self.probs =  generator.lowRisk()
-        self.prompt = "Imagine you are playing a a game where you are tying to win as much money as possible. You have two options, A and B.\n"
+    def __init__(self, probabilities=None):
+        if probabilities is None:
+            generator = ProbGenerator()
+            self.probs =  generator.lowRisk()
+        else:
+            self.probs = probabilities
+
         
-    def iterate(self, trials=5):
-       
-        options = ["A", "B"]
+        self.letter_choices = ["F","J"]
+        self.risk_letter = random.choice(self.letter_choices)
+        self.prompt = "Imagine you are playing a a game where you are tying to win as much money as possible. You have two options, F and J.\n"
+        
+    def iterate(self, trials=10):
         #print(self.probs)
         for i in range(trials):
           pick = random.randrange(0,2)
           
           gain = 0
-          if options[pick] == "B":
+          if self.letter_choices[pick] ==self. risk_letter:
               result = random.uniform(0,1)
-              if result < self.probs["risk_prob"]:
-                  gain = self.probs["risky"]
+              if result < self.probs[1]:
+                  gain = self.probs[2]
           else:
-              gain = self.probs["base"]
-          self.prompt = self.prompt + f"You choose option {options[pick]}, and get ${gain}.\n"
+              gain = self.probs[0]
+          self.prompt = self.prompt + f"You choose option {self.letter_choices[pick]}, and get ${gain}.\n"
         
-       # print(self.prompt)
-        return self.prompt + "Which would you now choose? "
+        print(self.prompt)
+        return {"prompt": self.prompt + "Which would you now choose?", "risk":self.risk_letter}
               
 exp = ExpSim()
 exp.iterate()

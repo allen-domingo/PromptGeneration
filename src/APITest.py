@@ -9,9 +9,9 @@ class AI:
       organization=os.environ.get("ORGANIZATION", "org"),
       api_key=os.environ.get("api_key", "key")
     )
-  def run(self, prompt):
+  def run(self, prompt, model_name="gpt-3.5-turbo", strm=True):
     return self.openai.chat.completions.create(
-      model="gpt-3.5-turbo",
-      messages=[{"role": "user", "content": prompt + "Say only the letter and nothing else"}],
-      stream=True,
+      model=model_name,
+      messages=[{"role": "user", "content": prompt + "Say only the letter and nothing else."}],
+      stream=strm,
   )
