@@ -28,7 +28,7 @@ class ExpSim:
           self.prompt = self.prompt + f"You choose option {self.letter_choices[pick]}, and get ${gain}.\n"
         
         print(self.prompt)
-        return {"prompt": self.prompt + "Which would you now choose?", "risk":self.risk_letter}
+        return {"prompt": self.prompt + "Which would you now choose? \nGive your answer using the tags <Answer> CHOICE </Answer>, where CHOICE is either F or J.", "risk":self.risk_letter}
               
 exp = ExpSim()
 exp.iterate()

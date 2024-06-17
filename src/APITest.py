@@ -12,6 +12,6 @@ class AI:
   def run(self, prompt, model_name="gpt-3.5-turbo", strm=True):
     return self.openai.chat.completions.create(
       model=model_name,
-      messages=[{"role": "user", "content": prompt + "Say only the letter and nothing else."}],
+      messages=[{"role": "user", "content": prompt}],
       stream=strm,
   )
