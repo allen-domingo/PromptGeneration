@@ -1,6 +1,5 @@
 from Prompt import Prompt
-# from OpenAIModel import OpenAIModel
-from HuggingFaceModel import HuggingFaceModel
+from APITest import AI
 from ExpSim import ExpSim
 from ProbCondition import ProbCondition
 from ProbGenerator import ProbGenerator
@@ -16,26 +15,18 @@ def main():
     freq_exp = [0,0]
     freq_letter = [0,0]
     freq_risk_letter = [0,0]
-
-    gptInstance = HuggingFaceModel(name="openai-community/gpt2", hf_key="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")
-
+    
     c_sets = ProbGenerator().createChoiceSets()
     for choice_set in c_sets:
         experience = ExpSim(choice_set).iterate(10)
-        ans = gptInstance.run(experience["prompt"])
+        gptInstance = AI()
+        stream = gptInstance.run(experience["prompt"], strm=False)
         if experience["risk"] == "F":
                 freq_risk_letter[0] +=1
         else:
                 freq_risk_letter[1] +=1
-        print(ans)
-
-        pattern = re.search("(?<=\<Answer>)(.*?)(?=\</Answer>)",ans)
-
-        # if the pattern is found
-        if pattern != None:
-            answer = re.sub("\s","",pattern.group())
-        else:
-            answer = "None"
+        ans = stream.choices[0].message.content
+        answer = re.sub("\s","",re.search("(?<=\<Answer>)(.*?)(?=\</Answer>)",ans).group())        
         if answer in letter_list:
             if(answer != experience["risk"]):
                         freq_exp[0] += 1
@@ -45,23 +36,17 @@ def main():
                     freq_letter[0]+=1
             elif answer == "J":
                     freq_letter[1]+=1
-
-
+            
+                    
     print("\n")
     pc_list = ProbCondition().PromptList()
-
     for prompt in pc_list:
+        gptInstance = AI()
 
-        ans = gptInstance.run(prompt["prompt"])
-
-        pattern = re.search("(?<=\<Answer>)(.*?)(?=\</Answer>)",ans)
-
-        # if the pattern is found
-        if pattern != None:
-            answer = re.sub("\s","",pattern.group())
-        else:
-            answer = "None"
-
+        stream = gptInstance.run(prompt["prompt"],strm=False)
+            
+        ans = stream.choices[0].message.content
+        answer = re.sub("\s","",re.search("(?<=\<Answer>)(.*?)(?=\</Answer>)",ans).group())        
         if answer in letter_list:
             if(answer != prompt["risk"]):
                         freq_desc[0] += 1
@@ -71,9 +56,9 @@ def main():
                     freq_letter[0]+=1
             elif answer == "J":
                     freq_letter[1]+=1
-
-
-
+    
+               
+   
     df = pd.DataFrame(answer_list)
     fig1 = px.bar(df, x=answer_list,y=freq_desc, labels={"answer_list": "Option", "freq": "Frequency"}
 ,                  title="Description Option Frequency")
@@ -89,5 +74,5 @@ def main():
     """
     f = open("results.txt", "w")
     f.write(results)
-
+ 
 main()
