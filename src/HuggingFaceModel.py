@@ -7,9 +7,10 @@ from dotenv import find_dotenv, load_dotenv
 import os
 
 class HuggingFaceModel:
-  def __init__(self, name="TheBloke/Llama-2-13B-chat-GPTQ", hf_key=None):
+  def __init__(self, name="TheBloke/Llama-2-13B-chat-GPTQ", prompt_format='f"[INST] <<SYS>>{system_prompt}<</SYS>>\n{user_prompt}[/INST]"', hf_key=None):
 
     self.model_name = name
+    self.prompt_format = prompt_format
 
     self.tokenizer = AutoTokenizer.from_pretrained(name, use_fast=True)
 
@@ -28,9 +29,9 @@ class HuggingFaceModel:
                       trust_remote_code=True,
                       revision="main")
 
-  def run(self, prompt, temperature=0.0):
+  def run(self, user_prompt, system_prompt="", temperature=0.0):
 
-    prompt = f"[INST] <<SYS>><</SYS>>\n{prompt}[/INST]"
+    prompt = eval(self.prompt_format)
 
     prompt_len = len(prompt)
 
