@@ -1,5 +1,9 @@
 from ProbGenerator import ProbGenerator
 import random
+
+# this class generates an iterator of prompts that pose the
+# scenario with raw probabilities
+
 class ProbCondition:
     def __init__(self):
         self.choice_sets = ProbGenerator().createChoiceSets()
@@ -19,7 +23,8 @@ class ProbCondition:
         }
     def PromptList(self):
         return map(self.createPrompt, self.choice_sets)
-pc  = ProbCondition()
-li = pc.PromptList()
 
-print(li)
+# pc  = ProbCondition()
+# li = pc.PromptList()
+#
+# print(li)

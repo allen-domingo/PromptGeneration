@@ -19,14 +19,27 @@ def main():
 
     gptInstance = HuggingFaceModel(name="openai-community/gpt2")
 
+    # we generate a list where each element is a tuple containing
+    # a reward for the safe option, a probability for the risky option
+    # and a reward for the risky option
     c_sets = ProbGenerator().createChoiceSets()
+
+    # we go through this list and for each element we
+    # get a response from the LLM when the problem is
+    # phrased experientially
     for choice_set in c_sets:
+        # generate an experiential prompt
         experience = ExpSim(choice_set).iterate(10)
         ans = gptInstance.run(experience["prompt"])
+
+        # keep track of how often the risk letter was
+        # a particular letter (the ExpSim class selects randomly,
+        # so the frequency should be equal)
         if experience["risk"] == "F":
                 freq_risk_letter[0] +=1
         else:
                 freq_risk_letter[1] +=1
+
         print(ans)
 
         pattern = re.search("(?<=\<Answer>)(.*?)(?=\</Answer>)",ans)
@@ -36,6 +49,7 @@ def main():
             answer = re.sub("\s","",pattern.group())
         else:
             answer = "None"
+
         if answer in letter_list:
             if(answer != experience["risk"]):
                         freq_exp[0] += 1
