@@ -1,5 +1,10 @@
 from ProbGenerator import ProbGenerator
 import random
+
+# this class generates a random history of risky or safe choices
+# it can be used to generate prompts for LLMs that include an experiential
+# history in the prompt
+
 class ExpSim:
     def __init__(self, probabilities=None):
         if probabilities is None:
@@ -19,7 +24,7 @@ class ExpSim:
           pick = random.randrange(0,2)
           
           gain = 0
-          if self.letter_choices[pick] ==self. risk_letter:
+          if self.letter_choices[pick] == self.risk_letter:
               result = random.uniform(0,1)
               if result < self.probs[1]:
                   gain = self.probs[2]
@@ -27,8 +32,8 @@ class ExpSim:
               gain = self.probs[0]
           self.prompt = self.prompt + f"You choose option {self.letter_choices[pick]}, and get ${gain}.\n"
         
-        print(self.prompt)
+        #print(self.prompt)
         return {"prompt": self.prompt + "Which would you now choose? \nGive your answer using the tags <Answer> CHOICE </Answer>, where CHOICE is either F or J.", "risk":self.risk_letter}
               
-exp = ExpSim()
-exp.iterate()
+# exp = ExpSim()
+# exp.iterate()
