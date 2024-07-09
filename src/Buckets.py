@@ -32,16 +32,16 @@ class Buckets:
         safe_letter = letter_choices[safe_ind]
         risk_letter = letter_choices[1-safe_ind]
         if safe < 0:
-            block_1 = "In front of you are two buckets, labeled F and J. Each bucket contains 20 tickets, and each ticket is associated with a specific loss of money. You have a single opportunity to choose one of the two buckets. A ticket will be randomly drawn from the bucket you choose, and you will lose the amount of money written on the ticket.\nBelow are all the tickets in each bucket, listed in random order:\n"
+            block_1 = "In front of you are two buckets, labeled F and J. Each bucket contains 20 tickets, and each ticket is associated with a specific loss of money. You have a single opportunity to choose one of the two buckets. A ticket will be randomly drawn from the bucket you choose, and you will lose the amount of money written on the ticket.\n\nBelow are all the tickets in each bucket, listed in random order:\n\n"
         else:
-            block_1 = "In front of you are two buckets, labeled F and J. Each bucket contains 20 tickets, and each ticket is associated with a specific gain of money. You have a single opportunity to choose one of the two buckets. A ticket will be randomly drawn from the bucket you choose, and you will gain the amount of money written on the ticket.\nBelow are all the tickets in each bucket, listed in random order:\n"
+            block_1 = "In front of you are two buckets, labeled F and J. Each bucket contains 20 tickets, and each ticket is associated with a specific gain of money. You have a single opportunity to choose one of the two buckets. A ticket will be randomly drawn from the bucket you choose, and you will gain the amount of money written on the ticket.\n\nBelow are all the tickets in each bucket, listed in random order:\n\n"
         if safe_letter == "F":
             bucket_f = self.generate_safe_ticket(safe)
             bucket_j = self.generate_risk_ticket(outcome=risk, chance=prob, rand=rand)
         else:
             bucket_f = self.generate_risk_ticket(outcome=risk, chance=prob, rand=rand)
             bucket_j = self.generate_safe_ticket(safe)
-        return {"prompt": f"{block_1} F: {bucket_f}\n\n J: {bucket_j}\nWhich bucket would you choose?\n Give your answer using the tags <Answer> CHOICE </Answer>, where CHOICE is either F or J.", "risk":risk_letter}
+        return {"prompt": f"{block_1}F: {bucket_f}\n\nJ: {bucket_j}\n\nWhich bucket would you choose?\nGive your answer using the tags <Answer> CHOICE </Answer>, where CHOICE is either F or J.", "risk":risk_letter}
     def PromptList(self):
         return list(map(self.generate_prompt ,self.choice_sets))
         
